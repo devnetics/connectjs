@@ -9,7 +9,13 @@ export class UserData {
   _favorites = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
 
-  constructor(public events: Events, public storage: Storage) {}
+  constructor(public events: Events, public storage: Storage) {
+    this.storage.get('favorites').then( (results) => {
+      return results;
+    }, (err) => {
+      // console.log(err);
+    })
+  }
 
   hasFavorite(sessionName) {
     return (this._favorites.indexOf(sessionName) > -1);
@@ -17,12 +23,14 @@ export class UserData {
 
   addFavorite(sessionName) {
     this._favorites.push(sessionName);
+    this.storage.set('favorites', this._favorites);
   }
 
   removeFavorite(sessionName) {
     let index = this._favorites.indexOf(sessionName);
     if (index > -1) {
       this._favorites.splice(index, 1);
+      this.storage.set('favorites', this._favorites);
     }
   }
 

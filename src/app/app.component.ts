@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Events, MenuController, Nav, Platform } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { Splashscreen, StatusBar } from 'ionic-native';
+import { Splashscreen, StatusBar, Device } from 'ionic-native';
 
 // import { AccountPage } from '../pages/account/account';
 // import { LoginPage } from '../pages/login/login';
@@ -9,10 +9,15 @@ import { QRPage } from '../pages/qr/qr';
 // import { SignupPage } from '../pages/signup/signup';
 import { TabsPage } from '../pages/tabs/tabs';
 import { TutorialPage } from '../pages/tutorial/tutorial';
+import { SchedulePage } from '../pages/schedule/schedule';
+import { SpeakerListPage } from '../pages/speaker-list/speaker-list';
+import { MapPage } from '../pages/map/map';
+import { AboutPage } from '../pages/about/about';
 
 // Conference and user specific data.
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
+declare var QRReader: any;
 
 export interface PageObj {
   title: string;
@@ -33,13 +38,21 @@ export class ConferenceApp {
   // the left menu only works after login
   // the login page disables the left menu
   appPages: PageObj[] = [
+    { title: 'Schedule', component: SchedulePage, icon: 'calendar' },
+    { title: 'Speakers', component: SpeakerListPage, index: 1, icon: 'contacts' },
+    { title: 'Map', component: MapPage, index: 2, icon: 'map' },
+    { title: 'About', component: AboutPage, index: 3, icon: 'information-circle' },
+    { title: 'QR', component: QRPage, index: 4, icon: 'qr-scanner'}
+  ];
+
+  appPagesIos: PageObj[] = [
     { title: 'Schedule', component: TabsPage, icon: 'calendar' },
     { title: 'Speakers', component: TabsPage, index: 1, icon: 'contacts' },
     { title: 'Map', component: TabsPage, index: 2, icon: 'map' },
     { title: 'About', component: TabsPage, index: 3, icon: 'information-circle' },
-    { title: 'QR', component: QRPage, index: 4, icon: 'qr-scanner'}
-  ];
-  rootPage: any = TabsPage;
+    { title: 'QR', component: TabsPage, index: 4, icon: 'qr-scanner'}
+  ]
+  rootPage: any = SchedulePage;
   local: Storage;
 
   constructor(
@@ -50,9 +63,11 @@ export class ConferenceApp {
     confData: ConferenceData,
     public storage: Storage
   ) {
-
+    if (this.getMobileOS() === 'iOS') {
+      this.rootPage = TabsPage;
+    }
     // Call any initial plugins when ready
-    platform.ready().then(() => {
+    platform.ready().then(() => {            
       this.storage.get('intro').then((local) => {
         if (!local) {
           this.nav.setRoot(TutorialPage)
@@ -71,6 +86,13 @@ export class ConferenceApp {
     });
 
     this.listenToLoginEvents();
+  }
+
+  getMobileOS(){
+      var userAgent = navigator.userAgent || navigator.vendor
+      if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i)) return 'iOS';
+      else if (userAgent.match(/Android/i)) return 'Android';
+      else return 'unknown';
   }
 
   openPage(page: PageObj) {

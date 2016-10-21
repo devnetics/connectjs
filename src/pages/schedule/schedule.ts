@@ -18,8 +18,8 @@ export class SchedulePage {
   @ViewChild('scheduleList', {read: List}) scheduleList: List;
 
   dayIndex = 0;
+  selectedDay = 'selected-day';
   search: boolean;
-  day = 'Thursday';
   queryText = '';
   segment = 'all';
   excludeTracks = [];
@@ -38,6 +38,19 @@ export class SchedulePage {
     this.search=false;
   }
 
+  dayClass(cmpIndex: number) {
+    if (cmpIndex === this.dayIndex) {
+      return 'selected-day';
+    } else {
+      return '';
+    }
+  }
+
+  setDay(dayIndex: number, day: string) {
+    this.dayIndex = dayIndex;    
+    this.updateSchedule();
+  }
+
   showSearch() {
     this.search = true;
   }
@@ -53,8 +66,7 @@ export class SchedulePage {
     });
     popover.onDidDismiss((dayIndex: number, day: string) => {
       if (dayIndex === 0 || dayIndex === 1 || dayIndex === 2) {
-        this.dayIndex = dayIndex;
-        this.day = day;
+        this.dayIndex = dayIndex;        
         this.updateSchedule();
       }
     })

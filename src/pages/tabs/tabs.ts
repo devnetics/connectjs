@@ -10,6 +10,7 @@ import { SpeakerListPage } from '../speaker-list/speaker-list';
 
 
 @Component({
+  selector: 'tabs-root',
   templateUrl: 'tabs.html'
 })
 export class TabsPage {

@@ -1,12 +1,11 @@
 $categories: (
- ionic: color($colors, primary),
- angular: #AC282B,
- communication: #8E8D93,
- tooling: #FE4C52,
+ ionic: #fff,
+ android: #AC282B,
+ node: #8E8D93,
+ design: #FE4C52,
  services: #FD8B2D,
- design: #FED035,
  workshop: #69BB7B,
- food: #3BC7C4,
+ corejs: #3BC7C4,
  documentation: #B16BE3,
  navigation: #6600CC,
 );
@@ -23,3 +22,22 @@ page-schedule {
    }
   }
 }
+
+.toolbar-days {
+  text-align: center;
+}
+
+.day-text {
+  padding-bottom: 5px;
+}
+
+.selected-day {
+    color: white;    
+    background-color: red;
+    border-radius: 50%;    
+}
+
+// [button-stack] .button-inner{
+//   flex-direction: column
+
+// }
